@@ -1,0 +1,5 @@
+az login
+
+az group create -l eastus -n BRK2315
+
+az group deployment create --name BRK2315 --resource-group BRK2315 --template-uri "https://raw.githubusercontent.com/pierreroman/VancHackfest/master/IACRoomsy.json"

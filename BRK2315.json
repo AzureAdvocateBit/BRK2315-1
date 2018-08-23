@@ -1,0 +1,324 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+        "sites_TestBedWebApp1_name": {
+            "defaultValue": "TestBedWebApp1",
+            "type": "String"
+        },
+        "serverfarms_TestBedWebAppPlan_name": {
+            "defaultValue": "TestBedWebAppPlan",
+            "type": "String"
+        }
+	},
+
+	"variables": {
+		"apiVersion": "2015-06-15",
+
+		"DBVMName": "LinuxmySQL",
+		"DBPublicIPNSG": "DBPublicIPNSG",
+		"DBDNSLabel": "dbhost",
+		"DBPublicIPName": "[concat('DBPublicIPName', uniqueString(resourceGroup().id))]",
+		"DBHostNIC": "DBHostNIC",
+		"DBVMAdminName": "sysadmin",
+		"adminPublicKey": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCxU2qakEIdKLScRlg3csGxrbhyj96TZ3E0bXoF78+7aJxXx2VSqUEzo+DF6reE9Ya/Y/Awvw2cSqM7420GBJeZeX8byQ6kW7Hz/8m/mXNpm7wPJpRnzy0SfAeVqZ0pW3XsCusVC/FzhY7OoL77q0pQGIbASoA8gYTYQb4uqnMm+bEuw4PoEGi0wQNXyYVzT/wW//c2aVVFuHb1kASrcQG0acOJDfx8j3oharhaxEo5sKSWxEKCHZazkUE4Gc+3MHmx162EE/YSrqjemdF9EoCpaorKFy2FyjwiC/Nmz2RVu6MXxDnHrMaLbdF6Z8LdStRJPxHRFuV4Q5/YJTwNPSVv imported-openssh-key",
+		"adminPassword": "P@ssw0rd!234",
+		"OSDiskName": "[concat(variables('DBVMName'),'osdisk')]",
+		"vmSize": "Standard_DS1_v2",
+
+		"gatewaySku": "Standard",
+		"gatewayPublicIPName": "[concat('gw1pip', uniqueString(resourceGroup().id))]",
+
+		"VNetname": "RoomsyNet",
+		"VNetPrefix": "10.0.0.0/16",
+		"VNetSubnet1Name": "Subnet-1",
+		"VNetSubnetPrefix": "10.0.0.0/24",
+		"VNetgatewayName": "Gateway",
+		"VNetGatewaySubnetName": "GatewaySubnet",
+		"VNetGatewaySubnetPrefix": "10.0.254.0/24",
+
+		"storageAccountName": "[concat(uniquestring(resourceGroup().id), 'standardsa')]",
+		"storageAccountType": "Standard_LRS",
+		"vmStorageAccountContainerName": "vhds",
+
+
+		"vnetRef": "[resourceId('Microsoft.Network/virtualNetworks',variables('VNetname'))]",
+		"SubnetRef": "[concat(variables('vnetRef'),'/subnets/',variables('VNetSubnet1Name'))]"
+
+	},
+
+	"resources": [{
+			"apiVersion": "2015-06-15",
+			"type": "Microsoft.Network/virtualNetworks",
+			"name": "[variables('VNetname')]",
+			"location": "[resourceGroup().location]",
+			"dependsOn": [],
+			"properties": {
+				"addressSpace": {
+					"addressPrefixes": [
+						"[variables('VNetPrefix')]"
+					]
+				},
+				"subnets": [{
+						"name": "[variables('VNetSubnet1Name')]",
+						"properties": {
+							"addressPrefix": "[variables('VNetSubnetPrefix')]"
+						}
+					},
+					{
+						"name": "[variables('VNetGatewaySubnetName')]",
+						"properties": {
+							"addressPrefix": "[variables('VNetGatewaySubnetPrefix')]"
+						}
+					}
+				]
+			}
+		},
+
+		{
+			"apiVersion": "2016-03-30",
+			"type": "Microsoft.Network/publicIPAddresses",
+			"name": "[variables('gatewayPublicIPName')]",
+			"location": "[resourceGroup().location]",
+			"comments": "This is the public IP for vNet Gateway",
+			"properties": {
+				"publicIPAllocationMethod": "Dynamic"
+			}
+		},
+
+		{
+			"apiVersion": "2016-03-30",
+			"type": "Microsoft.Network/publicIPAddresses",
+			"name": "[variables('DBPublicIPName')]",
+			"location": "[resourceGroup().location]",
+			"properties": {
+				"publicIPAllocationMethod": "Dynamic",
+				"dnsSettings": {
+					"domainNameLabel": "[variables('DBDNSLabel')]"
+				}
+			}
+		},
+
+		{
+			"type": "Microsoft.Network/networkSecurityGroups",
+			"name": "[variables('DBPublicIPNSG')]",
+			"apiVersion": "2016-03-30",
+			"location": "[resourceGroup().location]",
+			"properties": {
+				"securityRules": [{
+						"name": "SSH",
+						"properties": {
+							"protocol": "Tcp",
+							"sourcePortRange": "*",
+							"destinationPortRange": "22",
+							"sourceAddressPrefix": "*",
+							"destinationAddressPrefix": "*",
+							"access": "Allow",
+							"priority": 1000,
+							"direction": "Inbound"
+						}
+					},
+					{
+						"name": "MySQL",
+						"properties": {
+							"protocol": "Tcp",
+							"sourcePortRange": "*",
+							"destinationPortRange": "3306",
+							"sourceAddressPrefix": "*",
+							"destinationAddressPrefix": "*",
+							"access": "Allow",
+							"priority": 1002,
+							"direction": "Inbound"
+						}
+					}
+				]
+			},
+			"resources": [],
+			"dependsOn": []
+		},
+
+		{
+			"type": "Microsoft.Network/networkInterfaces",
+			"name": "[variables('DBHostNIC')]",
+			"apiVersion": "2016-03-30",
+			"location": "[resourceGroup().location]",
+			"dependsOn": [
+				"[resourceId('Microsoft.Network/virtualNetworks', variables('VNetname'))]",
+				"[resourceId('Microsoft.Network/publicIPAddresses', variables('DBPublicIPName'))]",
+				"[resourceId('Microsoft.Network/networkSecurityGroups', variables('DBPublicIPNSG'))]"
+			],
+			"properties": {
+				"ipConfigurations": [{
+					"name": "ipconfig1",
+					"properties": {
+						"privateIPAddress": "10.0.0.4",
+						"privateIPAllocationMethod": "Dynamic",
+						"publicIPAddress": {
+							"id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('DBPublicIPName'))]"
+						},
+						"subnet": {
+							"id": "[variables('SubnetRef')]"
+						}
+					}
+				}],
+				"dnsSettings": {
+					"dnsServers": []
+				},
+				"enableIPForwarding": false,
+				"networkSecurityGroup": {
+					"id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('DBPublicIPNSG'))]"
+				}
+			}
+		},
+		{
+			"apiVersion": "2015-05-01-preview",
+			"type": "Microsoft.Compute/virtualMachines",
+			"name": "[variables('DBVMName')]",
+			"location": "[resourceGroup().location]",
+			"dependsOn": [
+				"[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
+				"[concat('Microsoft.Network/networkInterfaces/', variables('DBHostNIC'))]"
+			],
+			"properties": {
+				"hardwareProfile": {
+					"vmSize": "[variables('vmSize')]"
+				},
+				"osProfile": {
+					"computerName": "[variables('DBVMName')]",
+					"adminUsername": "[variables('DBVMAdminName')]",
+					"adminPassword": "[variables('adminPassword')]",
+					"linuxConfiguration": {
+						"disablePasswordAuthentication": true,
+						"ssh": {
+							"publicKeys": [{
+								"path": "/home/sysadmin/.ssh/authorized_keys",
+								"keyData": "[variables('adminPublicKey')]"
+							}]
+						}
+					}
+				},
+				"storageProfile": {
+					"imageReference": {
+						"publisher": "Canonical",
+						"offer": "UbuntuServer",
+						"sku": "16.04.0-LTS",
+						"version": "latest"
+					},
+					"osDisk": {
+						"name": "osdisk",
+						"vhd": {
+							"uri": "[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName')), variables('apiVersion')).primaryEndpoints.blob, variables('vmStorageAccountContainerName'),'/',variables('OSDiskName'),'.vhd')]"
+						},
+						"caching": "ReadWrite",
+						"createOption": "FromImage"
+					},
+					"dataDisks": [{
+							"lun": 0,
+							"name": "[concat(variables('DBVMName'),'-data1')]",
+							"createOption": "Empty",
+							"vhd": {
+								"uri": "[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName')), variables('apiVersion')).primaryEndpoints.blob, variables('vmStorageAccountContainerName'),'/',concat(variables('DBVMName'),'-data1'),'.vhd')]"
+							},
+							"caching": "None",
+							"diskSizeGB": "1023"
+						}
+					]
+				},
+				"networkProfile": {
+					"networkInterfaces": [{
+						"id": "[resourceId('Microsoft.Network/networkInterfaces',variables('DBHostNIC'))]"
+					}]
+				}
+			}
+		},
+		{
+			"type": "Microsoft.Compute/virtualMachines/extensions",
+			"name": "[concat(variables('DBVMName'),'/installMySQL')]",
+			"apiVersion": "2015-05-01-preview",
+			"location": "[resourceGroup().location]",
+			"dependsOn": [
+				"[concat('Microsoft.Compute/virtualMachines/', variables('DBVMName'))]"
+			],
+			"properties": {
+				"publisher": "Microsoft.Azure.Extensions",
+				"type": "CustomScript",
+				"typeHandlerVersion": "2.0",
+				"autoUpgradeMinorVersion": true,
+				"settings": {
+					"fileUris": [
+						"https://raw.githubusercontent.com/pierreroman/VancHackfest/master/raid-mysql.sh"
+					],
+					"commandToExecute": "sh raid-mysql.sh"
+				}
+			}
+		},
+		{
+			"type": "Microsoft.Storage/storageAccounts",
+			"name": "[variables('storageAccountName')]",
+			"apiVersion": "2015-05-01-preview",
+			"location": "[resourceGroup().location]",
+			"properties": {
+				"accountType": "[variables('storageAccountType')]"
+			}
+		},
+        {
+            "comments": "Generalized from resource: '/subscriptions/54a522b6-6cd7-4325-b4e6-566f9d921835/resourceGroups/IACTestbed/providers/Microsoft.Web/serverfarms/TestBedWebAppPlan'.",
+            "type": "Microsoft.Web/serverfarms",
+            "sku": {
+                "name": "S1",
+                "tier": "Standard",
+                "size": "S1",
+                "family": "S",
+                "capacity": 1
+            },
+            "name": "[parameters('serverfarms_TestBedWebAppPlan_name')]",
+            "apiVersion": "2015-08-01",
+            "location": "Canada East",
+            "properties": {
+                "name": "[parameters('serverfarms_TestBedWebAppPlan_name')]",
+                "numberOfWorkers": 1
+            },
+            "resources": [],
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/54a522b6-6cd7-4325-b4e6-566f9d921835/resourceGroups/IACTestbed/providers/Microsoft.Web/sites/TestBedWebApp1'.",
+            "type": "Microsoft.Web/sites",
+            "name": "[parameters('sites_TestBedWebApp1_name')]",
+            "apiVersion": "2015-08-01",
+            "location": "Canada East",
+            "tags": {
+                "hidden-related:/subscriptions/54a522b6-6cd7-4325-b4e6-566f9d921835/resourcegroups/IACTestbed/providers/Microsoft.Web/serverfarms/TestBedWebAppPlan": "empty"
+            },
+            "properties": {
+                "name": "[parameters('sites_TestBedWebApp1_name')]",
+                "hostNames": [
+                    "testbedwebapp1.azurewebsites.net"
+                ],
+                "enabledHostNames": [
+                    "testbedwebapp1.azurewebsites.net",
+                    "testbedwebapp1.scm.azurewebsites.net"
+                ],
+                "hostNameSslStates": [
+                    {
+                        "name": "[concat(parameters('sites_TestBedWebApp1_name'),'testbedwebapp1.azurewebsites.net')]",
+                        "sslState": 0,
+                        "thumbprint": null,
+                        "ipBasedSslState": 0
+                    },
+                    {
+                        "name": "[concat(parameters('sites_TestBedWebApp1_name'),'testbedwebapp1.scm.azurewebsites.net')]",
+                        "sslState": 0,
+                        "thumbprint": null,
+                        "ipBasedSslState": 0
+                    }
+                ],
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_TestBedWebAppPlan_name'))]"
+            },
+            "resources": [],
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_TestBedWebAppPlan_name'))]"
+            ]
+        }
+	]
+}
