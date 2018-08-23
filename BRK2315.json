@@ -246,7 +246,7 @@
 				"autoUpgradeMinorVersion": true,
 				"settings": {
 					"fileUris": [
-						"https://raw.githubusercontent.com/pierreroman/VancHackfest/master/raid-mysql.sh"
+						"https://raw.githubusercontent.com/pierreroman/BRK2315/master/raid-mysql.sh"
 					],
 					"commandToExecute": "sh raid-mysql.sh"
 				}
