@@ -21,7 +21,7 @@
 		"DBPublicIPName": "[concat('DBPublicIPName', uniqueString(resourceGroup().id))]",
 		"DBHostNIC": "DBHostNIC",
 		"DBVMAdminName": "sysadmin",
-		"adminPublicKey": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCxU2qakEIdKLScRlg3csGxrbhyj96TZ3E0bXoF78+7aJxXx2VSqUEzo+DF6reE9Ya/Y/Awvw2cSqM7420GBJeZeX8byQ6kW7Hz/8m/mXNpm7wPJpRnzy0SfAeVqZ0pW3XsCusVC/FzhY7OoL77q0pQGIbASoA8gYTYQb4uqnMm+bEuw4PoEGi0wQNXyYVzT/wW//c2aVVFuHb1kASrcQG0acOJDfx8j3oharhaxEo5sKSWxEKCHZazkUE4Gc+3MHmx162EE/YSrqjemdF9EoCpaorKFy2FyjwiC/Nmz2RVu6MXxDnHrMaLbdF6Z8LdStRJPxHRFuV4Q5/YJTwNPSVv imported-openssh-key",
+		"adminPublicKey": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDIJNPQySHU2PWI8hreZZXwnGPJ8KQVRMD11pgiMgNr3bYhFEGQlo1Oygd6PkiwWTuu2MimBa3KnbxHSi3HK6zTEoexfuO8dL++MzZemB9IX3vEIVGQ3CpJNQOwCzzSVIaKP8cobes7DWwEIAT+xb7kL1Z1zcit6hX/Ef2jEn1aBRw9Ihxt+l0E6gdCLTXhYMQnQNqX/kFCzYxHWMH7n/LOzjwgEtLogSHX7jC8/DIpHAFKVuT6TyRZoqaCTQIt0rCcJgYKuAi0FbmjAn3SAXXCTz+8g6fuMyz/m9u4+rmu4kcXT3YgGfnFs/ITeMvze/g+wy2yzcE9zk2pb58Cv8d2VUsv6yQH9Qki78rqsho5t59poS+/9IP1ZORobGI6U4pOE5U9Tqjgjuf8gQQMd3mWQWhNU4SxqU6pcFSwCExcUbWg5uToN/PyhFI9ay30TC4Lb/QXn8QMIpgozBVH5ILqNDnyEd36JKqCeJczlC9e5E2097805JVUvFcyt6NopmkA6+zTMOPfSUxQD4D7YAcGk9rV0uN8o2MMcEbJlTtyyqFjfcWw7W69LBRiONfEUXaWPpPiCENkXZ6O5eMty7Jr4HaxSrDfVy2NfpWdmJpuPtv2a3SoCENjkmK6Kgrzi/3WUnptYPEOHXZtTPsPAK0wOSvlaXVgzqv2KRb4hYWEGw== pierrer@microsoft.com",
 		"adminPassword": "P@ssw0rd!234",
 		"OSDiskName": "[concat(variables('DBVMName'),'osdisk')]",
 		"vmSize": "Standard_DS1_v2",
