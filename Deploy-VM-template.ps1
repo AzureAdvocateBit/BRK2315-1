@@ -75,7 +75,7 @@ $Date = Get-Date -Format yyyyMMdd
 
 # set  Root Uri of GitHub Repo (select AbsoluteUri)
 
-$TemplateRootUriString = "https://raw.githubusercontent.com/pierreroman/BRK2315/master/"
+$TemplateRootUriString = "https://raw.githubusercontent.com/pierreroman/BRK2315/master/ARM/"
 $TemplateURI = New-Object System.Uri -ArgumentList @($TemplateRootUriString)
 
 $TemplateAS = $TemplateURI.AbsoluteUri + "VMTemplate-AS.json"
