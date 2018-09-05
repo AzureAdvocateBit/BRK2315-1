@@ -141,7 +141,7 @@ $Vnet_Results = New-AzureRmResourceGroupDeployment -ResourceGroupName $ResourceG
         datasubnetaddressPrefix = '192.168.102.0/24'; `
         Gatewaysubnetsname = 'GatewaySubnet'; `
         GatewaysubnetaddressPrefix = '192.168.127.0/24'; `
-    } -Force
+    } -Force | out-null
 
 $VNetName = $Vnet_Results.Outputs.VNetName.Value
 $VNetaddressPrefixes =  $Vnet_Results.Outputs.VNetaddressPrefixes.Value
@@ -184,7 +184,7 @@ ForEach ( $AS in $ASListUnique)
         @{ AvailabilitySetName = $ASName.ToString() ; `
             faultDomains = 2 ; `
             updateDomains = 5 ; `
-        } -Force
+        } -Force | out-null
 }
 #endregion
 
@@ -201,7 +201,7 @@ ForEach ( $NSG in $NSGListUnique){
     New-AzureRmResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateUri $NSGTemplate -TemplateParameterObject `
         @{`
             networkSecurityGroupName=$NSGName.ToString(); `
-         } -Force
+         } -Force | out-null
 }
 #endregion
 
@@ -216,7 +216,7 @@ New-AzureRmResourceGroupDeployment -Name 'domain-AS' -ResourceGroupName $Resourc
     @{ AvailabilitySetName = 'POC-DC-AS' ; `
         faultDomains = 2 ; `
         updateDomains = 5 ; `
-    } -Force
+    } -Force | out-null
 
 $DC_Results = New-AzureRmResourceGroupDeployment -Name $DeploymentName -ResourceGroupName $ResourceGroupName -TemplateUri $DCTemplate -TemplateParameterObject `
     @{ `
@@ -227,7 +227,7 @@ $DC_Results = New-AzureRmResourceGroupDeployment -Name $DeploymentName -Resource
         domainName = 'AzurePOC.local'
         adAvailabilitySetName = 'POC-DC-AS'; `
         virtualNetworkName = 'Vnet-POC'; `
-    } -Force
+    } -Force | out-null
 
 #endregion
 
