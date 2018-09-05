@@ -1,0 +1,34 @@
+Server,servername,OS,ImageName,StorageAccount,subnet,AvailabilitySet,DataDiskSize,VMSize
+Admin Jumpbox,poc-eus-admin,Windows,Win2012R2,storagestd,biz,None,None,Standard_D2_v2
+Certificiate Authority,poc-eus-ca,Windows,Win2012R2,storagestd,mgmt,None,None,Standard_D2_v2
+Cron Server,poc-eus-cron,Windows,Win2012R2,storagestd,biz,None,None,Standard_D2_v2
+Deploy Server - Windows,poc-eus-deploy1,Windows,Win2012R2,storagestd,mgmt,None,None,Standard_D2_v2
+Datafeeds Server 01,poc-eus-dfd1,Windows,Win2012R2,storagestd,biz,Igloo-POC-DFD-AS,None,Standard_D2_v2
+Datafeeds Server 02,poc-eus-dfd2,Windows,Win2012R2,storagestd,biz,Igloo-POC-DFD-AS,None,Standard_D2_v2
+DFS Server 01,poc-eus-dfs1,Windows,Win2012R2,storagestd,biz,Igloo-POC-DFS-AS,None,Standard_D2_v2
+DFS Server 02,poc-eus-dfs2,Windows,Win2012R2,storagestd,biz,Igloo-POC-DFS-AS,None,Standard_D2_v2
+Diff Server,poc-eus-diff,Windows,Win2012R2,storagestd,biz,None,None,Standard_D2_v2
+Doc Engine Server 01,poc-eus-doceng1,Windows,Win2012R2,storagestd,biz,Igloo-POC-DocEng-AS,None,Standard_D2_v2
+Doc Engine Server 02,poc-eus-doceng2,Windows,Win2012R2,storagestd,biz,Igloo-POC-DocEng-AS,None,Standard_D2_v2
+FTP,poc-eus-ftp,Windows,Win2012R2,storagestd,biz,None,300,Standard_D2_v2
+ICS Server 01,poc-eus-ics1,Windows,Win2012R2,storagestd,biz,Igloo-POC-ICS-AS,None,Standard_D2_v2
+ICS Server 02,poc-eus-ics2,Windows,Win2012R2,storagestd,biz,Igloo-POC-ICS-AS,None,Standard_D2_v2
+Internal Web Services 01 (ie. CCS),poc-eus-iws1,Windows,Win2012R2,storagestd,biz,Igloo-POC-IWS-AS,None,Standard_D2_v2
+Internal Web Services 02 (ie. CCS),poc-eus-iws2,Windows,Win2012R2,storagestd,biz,Igloo-POC-IWS-AS,None,Standard_D2_v2
+Mobile Data Processor Server 01,poc-eus-mdp1,Windows,Win2012R2,storagestd,biz,Igloo-POC-MDP-AS,None,Standard_D2_v2
+Mobile Data Processor Server 01,poc-eus-mdp2,Windows,Win2012R2,storagestd,biz,Igloo-POC-MDP-AS,None,Standard_D2_v2
+Monitoring Server 01 (PRTG),poc-eus-mon1,Windows,Win2012R2,storageprem,biz,None,2048,Standard_F8
+Monitoring Server 02 (Solarwinds),poc-eus-mon2,Windows,Win2012R2,storagestd,biz,None,15,Standard_D2_v2
+Monitoring Server 04 (Firewall Analyzer),poc-eus-mon4,Windows,Win2012R2,storagestd,biz,None,None,Standard_D2_v2
+OAuth Web Server 01,poc-eus-oap1,Windows,Win2012R2,storagestd,biz,Igloo-POC-OAP-AS,None,Standard_D2_v2
+OAuth Web Server 02,poc-eus-oap2,Windows,Win2012R2,storagestd,biz,Igloo-POC-OAP-AS,None,Standard_D2_v2
+RabbitMQ Cluster Node 01,poc-eus-rmq1,Windows,Win2012R2,storagestd,biz,Igloo-POC-RMQ-AS,None,Standard_D2_v2
+RabbitMQ Cluster Node 01,poc-eus-rmq2,Windows,Win2012R2,storagestd,biz,Igloo-POC-RMQ-AS,None,Standard_D2_v2
+SAP Server,poc-eus-sap,Windows,Win2012R2,storagestd,biz,None,None,Standard_D2_v2
+Video Engine Server 01,poc-eus-videng1,Windows,Win2012R2,storagestd,biz,Igloo-POC-VidEng-AS,None,Standard_F4
+Video Engine Server 02,poc-eus-videng2,Windows,Win2012R2,storagestd,biz,Igloo-POC-VidEng-AS,None,Standard_F4
+Web Server 01,poc-eus-web1,Windows,Win2012R2,storagestd,web,Igloo-POC-Web-AS,None,Standard_D2_v2
+Web Server 02,poc-eus-web2,Windows,Win2012R2,storagestd,web,Igloo-POC-Web-AS,None,Standard_D2_v2
+Web Server 03,poc-eus-web3,Windows,Win2012R2,storagestd,web,Igloo-POC-Web-AS,None,Standard_D2_v2
+Web Server 04,poc-eus-web4,Windows,Win2012R2,storagestd,web,Igloo-POC-Web-AS,None,Standard_D2_v2
+Windows Update Services (WSUS),poc-eus-wsus,Windows,Win2012R2,storagestd,mgmt,None,200,Standard_D2_v2

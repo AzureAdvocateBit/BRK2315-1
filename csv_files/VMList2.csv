@@ -1,0 +1,16 @@
+Server,servername,OS,ImageName,StorageAccount,subnet,AvailabilitySet,DataDiskSize,VMSize
+Deploy Server - Linux,poc-eus-deploy2,Linux,CentOS7,storagestd,mgmt,None,50,Standard_A2_v2
+Redis Node 01,poc-eus-redis1,Linux,CentOS7,storagestd,biz,Igloo-POC-Redis-AS,50,Standard_A2m_v2
+Redis Node 02,poc-eus-redis2,Linux,CentOS7,storagestd,biz,Igloo-POC-Redis-AS,50,Standard_A2m_v2
+Redis Node 03,poc-eus-redis3,Linux,CentOS7,storagestd,biz,Igloo-POC-Redis-AS,50,Standard_A2m_v2
+Kafka Node 01,poc-eus-kafka1,Linux,CentOS7,storagestd,biz,Igloo-POC-Kafka-AS,80,Standard_A2m_v2
+Monitoring Server 02 (Solarwinds),poc-eus-mon2,Windows,Win2012R2,storagestd,biz,None,15,Standard_D2_v2
+Windows Update Services (WSUS),poc-eus-wsus,Windows,Win2012R2,storagestd,mgmt,None,200,Standard_D2_v2
+FTP,poc-eus-ftp,Windows,Win2012R2,storagestd,biz,None,300,Standard_D2_v2
+Monitoring Server 01 (PRTG),poc-eus-mon1,Windows,Win2012R2,storageprem,biz,None,2048,Standard_F8
+Admin Jumpbox,poc-eus-admin,Windows,Win2012R2,storagestd,biz,None,None,Standard_D2_v2
+Certificiate Authority,poc-eus-ca,Windows,Win2012R2,storagestd,mgmt,None,None,Standard_D2_v2
+Cron Server,poc-eus-cron,Windows,Win2012R2,storagestd,biz,None,None,Standard_D2_v2
+Deploy Server - Windows,poc-eus-deploy1,Windows,Win2012R2,storagestd,mgmt,None,None,Standard_D2_v2
+Datafeeds Server 01,poc-eus-dfd1,Windows,Win2012R2,storagestd,biz,Igloo-POC-DFD-AS,None,Standard_D2_v2
+Datafeeds Server 02,poc-eus-dfd2,Windows,Win2012R2,storagestd,biz,Igloo-POC-DFD-AS,None,Standard_D2_v2

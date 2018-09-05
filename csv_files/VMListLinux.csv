@@ -1,0 +1,20 @@
+Server,servername,OS,ImageName,StorageAccount,subnet,AvailabilitySet,DataDiskSize,VMSize
+Deploy Server - Linux,poc-eus-deploy2,Linux,CentOS7,storagestd,mgmt,None,50,Standard_A2_v2
+Redis Node 01,poc-eus-redis1,Linux,CentOS7,storagestd,biz,Igloo-POC-Redis-AS,50,Standard_A2m_v2
+Redis Node 02,poc-eus-redis2,Linux,CentOS7,storagestd,biz,Igloo-POC-Redis-AS,50,Standard_A2m_v2
+Redis Node 03,poc-eus-redis3,Linux,CentOS7,storagestd,biz,Igloo-POC-Redis-AS,50,Standard_A2m_v2
+Kafka Node 01,poc-eus-kafka1,Linux,CentOS7,storagestd,biz,Igloo-POC-Kafka-AS,80,Standard_A2m_v2
+Kafka Node 02,poc-eus-kafka2,Linux,CentOS7,storagestd,biz,Igloo-POC-Kafka-AS,80,Standard_A2m_v2
+Kafka Node 03,poc-eus-kafka3,Linux,CentOS7,storagestd,biz,Igloo-POC-Kafka-AS,80,Standard_A2m_v2
+Solr Node 01,poc-eus-solr1,Linux,CentOS6,storagestd,biz,Igloo-POC-SOLr-AS,80,Standard_A2m_v2
+Solr Node 02,poc-eus-solr2,Linux,CentOS6,storagestd,biz,Igloo-POC-SOLr-AS,80,Standard_A2m_v2
+Solr Node 03,poc-eus-solr3,Linux,CentOS6,storagestd,biz,Igloo-POC-SOLr-AS,80,Standard_A2m_v2
+ELK Node 01,poc-eus-elk1,Linux,CentOS7,storagestd,biz,Igloo-POC-ELK-AS,None,Standard_D2_v2
+ELK Node 02,poc-eus-elk2,Linux,CentOS7,storagestd,biz,Igloo-POC-ELK-AS,None,Standard_D2_v2
+ELK Node 03,poc-eus-elk3,Linux,CentOS7,storagestd,biz,Igloo-POC-ELK-AS,None,Standard_D2_v2
+Kafka Management Server,poc-eus-kfkmgmt,Linux,CentOS7,storagestd,mgmt,None,None,Standard_D2_v2
+Monitoring Server 03 (New Relic),poc-eus-mon3,Linux,CentOS7,storagestd,biz,None,None,Standard_A1_v2
+SMTP Server 01,poc-eus-smtp1,Linux,CentOS7,storagestd,biz,Igloo-POC-SMTP-AS,None,Standard_D2_v2
+SMTP Server 02,poc-eus-smtp2,Linux,CentOS7,storagestd,biz,Igloo-POC-SMTP-AS,None,Standard_D2_v2
+SPAM Server 01,poc-eus-spam1,Linux,CentOS7,storagestd,biz,Igloo-POC-SPAM-AS,None,Standard_D2_v2
+SPAM Server 02,poc-eus-spam2,Linux,CentOS7,storagestd,biz,Igloo-POC-SPAM-AS,None,Standard_D2_v2

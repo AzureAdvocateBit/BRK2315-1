@@ -1,0 +1,4 @@
+{
+  "fileUris": ["https://raw.githubusercontent.com/pierreroman/Igloo-POC/master/Custom_Scripts/dnsupdate.sh"],
+  "commandToExecute": "./dnsupdate.sh"
+}

@@ -1,0 +1,124 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vnetname": {
+            "type": "string"
+        },
+        "VnetaddressPrefix": {
+            "type": "string"
+        },
+        "mgmtsubnetsname": {
+            "type": "string"
+        },
+        "mgmtsubnetaddressPrefix": {
+            "type": "string"
+        },
+        "publicdmzinsubnetsname": {
+            "type": "string"
+        },
+        "publicdmzinsubnetaddressPrefix": {
+            "type": "string"
+        },
+        "publicdmzoutsubnetsname": {
+            "type": "string"
+        },
+        "publicdmzoutsubnetaddressPrefix": {
+            "type": "string"
+        },
+        "websubnetsname": {
+            "type": "string"
+        },
+        "websubnetaddressPrefix": {
+            "type": "string"
+        },
+        "bizsubnetsname": {
+            "type": "string"
+        },
+        "bizsubnetaddressPrefix": {
+            "type": "string"
+        },
+        "datasubnetsname": {
+            "type": "string"
+        },
+        "datasubnetaddressPrefix": {
+            "type": "string"
+        },
+        "Gatewaysubnetsname": {
+            "type": "string"
+        },
+        "GatewaysubnetaddressPrefix": {
+            "type": "string"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "apiVersion": "2015-06-15",
+            "type": "Microsoft.Network/virtualNetworks",
+            "name": "[parameters('vnetname')]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('VnetaddressPrefix')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[parameters('mgmtsubnetsname')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('mgmtsubnetaddressPrefix')]"
+                        }
+                    },
+                    {
+                        "name": "[parameters('publicdmzinsubnetsname')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('publicdmzinsubnetaddressPrefix')]"
+                        }
+                    },
+                    {
+                        "name": "[parameters('publicdmzoutsubnetsname')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('publicdmzoutsubnetaddressPrefix')]"
+                        }
+                    },
+                    {
+                        "name": "[parameters('websubnetsname')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('websubnetaddressPrefix')]"
+                        }
+                    },
+                    {
+                        "name": "[parameters('bizsubnetsname')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('bizsubnetaddressPrefix')]"
+                        }
+                    },
+                    {
+                        "name": "[parameters('datasubnetsname')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('datasubnetaddressPrefix')]"
+                        }
+                    },
+                    {
+                        "name": "[parameters('Gatewaysubnetsname')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('GatewaysubnetaddressPrefix')]"
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "outputs": {
+        "VNetName": {
+            "type": "string",
+            "value": "[parameters('vnetname')]"
+        },
+        "VNetaddressPrefixes": {
+            "type": "string",
+            "value": "[parameters('VnetaddressPrefix')]"
+        }
+    }
+}

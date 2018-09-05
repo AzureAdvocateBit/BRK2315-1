@@ -1,0 +1,2 @@
+Server,servername,OS,ImageName,StorageAccount,subnet,AvailabilitySet,DataDiskSize,VMSize
+Admin Jumpbox,poc-eus-admin,Windows,Win2012R2,storagestd,biz,None,None,Standard_D2_v2

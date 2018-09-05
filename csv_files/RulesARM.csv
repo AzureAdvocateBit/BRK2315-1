@@ -1,0 +1,7 @@
+Name,Priority,Access,SourceAddressPrefix,SourcePortRange,DestinationAddressPrefix,DestinationPortRange,Protocol,Direction,Description
+REMOTE_DESKTOP_PROTOCOL,1777,Deny,*,*,*,3389,TCP,Inbound,DES1
+HTTP,178,Allow,192.168.10.0/25,*,*,80,TCP,Inbound,DES2
+SMB,1799,Allow,*,*,172.16.24.0/24,445,TCP,Inbound,DES3
+SMBOut1,1801,Allow,*,*,*,445,TCP,Outbound,DES4
+SMBOut2,191,Deny,*,*,172.16.27.0/24,0-65535,TCP,Outbound,DES5
+DNS,200,Allow,*,*,*,53,UDP,Outbound,DES6
