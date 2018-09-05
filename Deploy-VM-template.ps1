@@ -1,3 +1,35 @@
+$PSScriptRoot#******************************************************************************
+# Script Functions
+# Execution begins here
+#******************************************************************************
+#region Functions
+function Login {
+    $needLogin = $true
+    Try {
+        $content = Get-AzureRmContext
+        if ($content) {
+            $needLogin = ([string]::IsNullOrEmpty($content.Account))
+        } 
+    } 
+    Catch {
+        if ($_ -like "*Login-AzureRmAccount to login*") {
+            $needLogin = $true
+        } 
+        else {
+            throw
+        }
+    }
+
+    if ($needLogin) {
+        $content=Login-AzureRmAccount
+    }
+    $content = Get-AzureRmContext
+    return $content
+}
+
+#endregion
+
+
 #******************************************************************************
 # Script body
 # Execution begins here
@@ -5,26 +37,33 @@
 $ErrorActionPreference = "Stop"
 $WarningPreference = "SilentlyContinue"
 $starttime = get-date
+$ScriptPath = $MyInvocation.MyCommand.Path
+$ScriptDir  = Split-Path -Parent $ScriptPath
 
 
 #region Prep & signin
 
 # sign in
 Write-Host "Logging in ...";
-Login-AzureRmAccount | Out-Null
+#Login-AzureRmAccount | Out-Null
+$AccountInfo=Login
 
 # select subscription
-$subscriptionId = Read-Host -Prompt 'Input your Subscription ID'
+$subscriptionId = $AccountInfo.Subscription.Id
+#$subscriptionId = Read-Host -Prompt 'Input your Subscription ID'
 Select-AzureRmSubscription -SubscriptionID $subscriptionId | out-null
 
 # select Resource Group
-$ResourceGroupName = Read-Host -Prompt 'Input the resource group for your network'
+#$ResourceGroupName = Read-Host -Prompt 'Input the resource group for your network'
+$ResourceGroupName = "BRK2315-PS-Demo1"
 
 # select Location
-$Location = Read-Host -Prompt 'Input the Location for your network'
+#$Location = Read-Host -Prompt 'Input the Location for your network'
+$Location = "Eastus"
 
 # select Location
-$VMListfile = Read-Host -Prompt 'Input the Location of the list of VMs to be created'
+#$VMListfile = Read-Host -Prompt 'Input the Location of the list of VMs to be created'
+$VMListfile = $ScriptDir + "\PSFiles\VMList.csv"
 
 # Define a credential object
 Write-Host "You Will now be asked for a UserName and Password that will be applied to the windows Virtual Machine that will be created";
@@ -57,7 +96,7 @@ $domainToJoin = "iglooaz.local"
 $Image = Import-CSV $VMListfile| % {$_.ImageName}
 $Image = $Image | select -uniq
 
-ForEach ( $ImageName in $Image){
+ForEach ( $ImageName in $Image) {
     Get-AzureRmImage -ImageName $ImageName -ResourceGroupName $ResourceGroupName -ev notPresent -ea 0 | out-null
     Write-Output "Image $ImageName does not exist'..."
 }
@@ -169,3 +208,4 @@ ForEach ( $VM in $VMList) {
 
 #endregion
 #>
+
