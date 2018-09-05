@@ -45,17 +45,15 @@ $ScriptDir  = Split-Path -Parent $ScriptPath
 
 # sign in
 Write-Host "Logging in ...";
-#Login-AzureRmAccount | Out-Null
 $AccountInfo=Login
 
 # select subscription
 $subscriptionId = $AccountInfo.Subscription.Id
-#$subscriptionId = Read-Host -Prompt 'Input your Subscription ID'
 Select-AzureRmSubscription -SubscriptionID $subscriptionId | out-null
 
 # select Resource Group
 #$ResourceGroupName = Read-Host -Prompt 'Input the resource group for your network'
-$ResourceGroupName = "BRK2315-PS-Demo1"
+$ResourceGroupName = "BRK2315Demo1"
 
 # select Location
 #$Location = Read-Host -Prompt 'Input the Location for your network'
