@@ -61,15 +61,13 @@ $Location = "Eastus"
 
 # select Location
 #$VMListfile = Read-Host -Prompt 'Input the Location of the list of VMs to be created'
-$VMListfile = $ScriptDir + "\PSFiles\VMList.csv"
+$VMListfile = $ScriptDir + "\csv_files\VMList.csv"
 
 # Define a credential object
 Write-Host "You Will now be asked for a UserName and Password that will be applied to the windows Virtual Machine that will be created";
 $cred = Get-Credential
 
 #region Set Template and Parameter location
-
-$Date = Get-Date -Format yyyyMMdd
 
 # set  Root Uri of GitHub Repo (select AbsoluteUri)
 
@@ -112,7 +110,7 @@ Get-AzureRmResourceGroup -Name $ResourceGroupName -ev notPresent -ea 0  | Out-Nu
 if ($notPresent) {
     Write-Output "Could not find resource group '$ResourceGroupName' - will create it."
     Write-Output "Creating resource group '$ResourceGroupName' in location '$Location'...."
-    New-AzureRmResourceGroup -Name $ResourceGroupName -Location $Location -Force | out-null
+    New-AzureRmResourceGroup -Name $ResourceGroupName -Location $Location -Force
 
 }
 else {
@@ -123,9 +121,9 @@ else {
 
 #region Deployment of virtual network
 Write-Output "Deploying virtual network..."
-$DeploymentName = 'Vnet-Subnet-'+ $Date
+#$DeploymentName = Get-Date -Format FileDateTime
 
-$Vnet_Results = New-AzureRmResourceGroupDeployment -Name $DeploymentName -ResourceGroupName $ResourceGroupName -TemplateUri $VnetTemplate -TemplateParameterObject `
+$Vnet_Results = New-AzureRmResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateUri $VnetTemplate -TemplateParameterObject `
     @{ `
         vnetname='Vnet-POC'; `
         VnetaddressPrefix = '192.168.0.0/17'; `
@@ -143,7 +141,7 @@ $Vnet_Results = New-AzureRmResourceGroupDeployment -Name $DeploymentName -Resour
         datasubnetaddressPrefix = '192.168.102.0/24'; `
         Gatewaysubnetsname = 'GatewaySubnet'; `
         GatewaysubnetaddressPrefix = '192.168.127.0/24'; `
-    } -Force | out-null
+    } -Force
 
 $VNetName = $Vnet_Results.Outputs.VNetName.Value
 $VNetaddressPrefixes =  $Vnet_Results.Outputs.VNetaddressPrefixes.Value
@@ -152,8 +150,8 @@ $VNetaddressPrefixes =  $Vnet_Results.Outputs.VNetaddressPrefixes.Value
 
 #region Deployment of Storage Account
 Write-Output "Deploying Storage Accounts..."
-$DeploymentName = 'storageAccount'+ $Date
-$SA_Results = New-AzureRmResourceGroupDeployment -Name $DeploymentName -ResourceGroupName $ResourceGroupName -TemplateUri $StorageTemplate -TemplateParameterObject `
+$DeploymentName = Get-Date -Format FileDateTime
+$SA_Results = New-AzureRmResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateUri $StorageTemplate -TemplateParameterObject `
     @{ `
         stdname = 'standardsa'; `
         premname = 'premiumsa'; `
@@ -181,12 +179,12 @@ $ASListUnique = $ASList.AvailabilitySet | select-object -unique
 ForEach ( $AS in $ASListUnique)
 {
     $ASName=$AS
-    $DeploymentName = $AS + $Date
-    New-AzureRmResourceGroupDeployment -Name $DeploymentName -ResourceGroupName $ResourceGroupName -TemplateUri $ASTemplate -TemplateParameterObject `
+    $DeploymentName = Get-Date -Format FileDateTime
+    New-AzureRmResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateUri $ASTemplate -TemplateParameterObject `
         @{ AvailabilitySetName = $ASName.ToString() ; `
             faultDomains = 2 ; `
             updateDomains = 5 ; `
-        } -Force | out-null
+        } -Force
 }
 #endregion
 
@@ -199,11 +197,11 @@ $NSGListUnique = $NSGList.subnet | select-object -unique
 
 ForEach ( $NSG in $NSGListUnique){
     $NSGName=$NSG+"-nsg"
-    $DeploymentName = $AS + $Date
-    New-AzureRmResourceGroupDeployment -Name $DeploymentName -ResourceGroupName $ResourceGroupName -TemplateUri $NSGTemplate -TemplateParameterObject `
+    $DeploymentName = Get-Date -Format FileDateTime
+    New-AzureRmResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateUri $NSGTemplate -TemplateParameterObject `
         @{`
             networkSecurityGroupName=$NSGName.ToString(); `
-         } -Force | out-null
+         } -Force
 }
 #endregion
 
@@ -218,7 +216,7 @@ New-AzureRmResourceGroupDeployment -Name 'domain-AS' -ResourceGroupName $Resourc
     @{ AvailabilitySetName = 'POC-DC-AS' ; `
         faultDomains = 2 ; `
         updateDomains = 5 ; `
-    } -Force | out-null
+    } -Force
 
 $DC_Results = New-AzureRmResourceGroupDeployment -Name $DeploymentName -ResourceGroupName $ResourceGroupName -TemplateUri $DCTemplate -TemplateParameterObject `
     @{ `
@@ -227,7 +225,7 @@ $DC_Results = New-AzureRmResourceGroupDeployment -Name $DeploymentName -Resource
         adminUsername = $userName; `
         adminPassword = $password; `
         domainName = 'AzurePOC.local'
-        adAvailabilitySetName = 'DC-AS'; `
+        adAvailabilitySetName = 'POC-DC-AS'; `
         virtualNetworkName = 'Vnet-POC'; `
     } -Force
 
@@ -254,7 +252,7 @@ foreach($nic in $nics)
 
 $vnet = Get-AzureRmVirtualNetwork -ResourceGroupName $ResourceGroupName -name 'Vnet-POC'
 $vnet.DhcpOptions.DnsServers = $IP 
-Set-AzureRmVirtualNetwork -VirtualNetwork $vnet | out-null
+Set-AzureRmVirtualNetwork -VirtualNetwork $vnet
 
 #endregion
 <#
