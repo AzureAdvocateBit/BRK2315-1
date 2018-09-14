@@ -52,15 +52,12 @@ $subscriptionId = $AccountInfo.Subscription.Id
 Select-AzureRmSubscription -SubscriptionID $subscriptionId | out-null
 
 # select Resource Group
-#$ResourceGroupName = Read-Host -Prompt 'Input the resource group for your network'
 $ResourceGroupName = "BRK2315Demo1"
 
 # select Location
-#$Location = Read-Host -Prompt 'Input the Location for your network'
 $Location = "Eastus"
 
 # select Location
-#$VMListfile = Read-Host -Prompt 'Input the Location of the list of VMs to be created'
 $VMListfile = $ScriptDir + "\csv_files\VMList.csv"
 
 # Define a credential object
@@ -87,21 +84,6 @@ $domainToJoin = "AzurePOC.local"
 
 #endregion
 
-#region check if image exist
-<#
-$Image = Import-CSV $VMListfile| % {$_.ImageName}
-$Image = $Image | select -uniq
-
-ForEach ( $ImageName in $Image) {
-    Get-AzureRmImage -ImageName $ImageName -ResourceGroupName $ResourceGroupName -ev notPresent -ea 0 | out-null
-    Write-Output "Image $ImageName does not exist'..."
-}
-
-
-#>
-
-#region Create the resource group
-
 # Start the deployment
 Write-Output "Starting deployment"
 
@@ -121,7 +103,6 @@ else {
 
 #region Deployment of virtual network
 Write-Output "Deploying virtual network..."
-#$DeploymentName = Get-Date -Format FileDateTime
 
 $Vnet_Results = New-AzureRmResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateUri $VnetTemplate -TemplateParameterObject `
     @{ `
@@ -255,7 +236,7 @@ $vnet.DhcpOptions.DnsServers = $IP
 Set-AzureRmVirtualNetwork -VirtualNetwork $vnet
 
 #endregion
-<#
+
 #region Deployment of VM from VMlist.CSV
 
 $VMList = Import-CSV $VMListfile
@@ -354,8 +335,6 @@ ForEach ( $VM in $VMList) {
 }
 
 #endregion
-#>
-
 
 $endtime = get-date
 $procestime = $endtime - $starttime
