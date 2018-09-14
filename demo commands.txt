@@ -1,1 +1,9 @@
-az group create -n brk2315 -l eastus && az vm create -g brk2315 -n myVM --image win2016datacenter --admin-username sysadmin --admin-password 'P@ssw0rd!234'
+Demo 1 - CLI vs Portal
+-------------------------------------
+az group create -n brk2315 -l eastus
+
+az vm create -g brk2315 -n myVM --image win2016datacenter --admin-username sysadmin --admin-password 'P@ssw0rd!234'
+
+Demo 2 - 
+-------------------------------------
+
