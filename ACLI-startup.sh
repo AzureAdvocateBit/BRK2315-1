@@ -1,1 +1,0 @@
-read -sp "Azure password: " AZ_PASS && echo && az login -u pierrer@microsoft.com -p $AZ_PASS
