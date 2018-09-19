@@ -47,6 +47,7 @@ $AccountInfo=Login
 ### Specify a name for Azure Resource Group
 $resourceGroupName = "PSAzDemo" + (New-Guid | ForEach-Object guid) -replace "-",""
 $resourceGroupName
+cmd /c pause | out-null
 
 ### Create a new Azure Resource Group
 New-AzureRmResourceGroup -Name $resourceGroupName -Location "East US"
@@ -59,7 +60,7 @@ $dnsLabelPrefix
 
 #[SuppressMessage("Microsoft.Security", "CS002:SecretInNextLine", Justification="Demo/doc secret.")]
 $password = ConvertTo-SecureString -String "PowerShellRocks!" -AsPlainText -Force
-New-AzureRmResourceGroupDeployment -ResourceGroupName $resourceGroupName -TemplateFile ./Compute-Linux.json -adminUserName psuser -adminPassword $password -dnsLabelPrefix $dnsLabelPrefixNew-AzureRmResourceGroupDeployment -ResourceGroupName $resourceGroupName -TemplateFile ./Compute-Linux.json -adminUserName psuser -adminPassword $password -dnsLabelPrefix $dnsLabelPrefix
+New-AzureRmResourceGroupDeployment -ResourceGroupName $resourceGroupName -TemplateFile ./ARM/Compute-Linux.json -adminUserName sysadmin -adminPassword $password -dnsLabelPrefix $dnsLabelPrefix
 
 ### Monitor the status of the deployment
 Get-AzureRmResourceGroupDeployment -ResourceGroupName $resourceGroupName
