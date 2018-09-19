@@ -1,30 +1,55 @@
-# Copyright (c) Microsoft Corporation. All rights reserved.
-# Licensed under the MIT License.
 
-### The techniques used in this demo are documented at
-### https://azure.microsoft.com/documentation/articles/powershell-azure-resource-manager/
+#******************************************************************************
+# Script Functions
+# Execution begins here
+#******************************************************************************
+#region Functions
+function Login {
+    $needLogin = $true
+    Try {
+        $content = Get-AzureRmContext
+        if ($content) {
+            $needLogin = ([string]::IsNullOrEmpty($content.Account))
+        } 
+    } 
+    Catch {
+        if ($_ -like "*Login-AzureRmAccount to login*") {
+            $needLogin = $true
+        } 
+        else {
+            throw
+        }
+    }
 
-### Import AzureRM.Profile.NetCore.Preview and AzureRM.Resources.NetCore.Preview modules.
-### AzureRM.NetCore.Preview is a wrapper module that pulls in these modules
-###
-### Because of issue https://github.com/PowerShell/PowerShell/issues/1618,
-### currently you will not be able to use "Install-Module AzureRM.NetCore.Preview" from
-### PowerShellGallery. You can use the following workaround until the issue is fixed:
-###
-### Install-Package -Name AzureRM.NetCore.Preview -Source https://www.powershellgallery.com/api/v2 -ProviderName NuGet -ExcludeVersion -Destination <Folder you want this to be installed>
-###
+    if ($needLogin) {
+        $content=Login-AzureRmAccount
+    }
+    $content = Get-AzureRmContext
+    return $content
+}
+
+#endregion
+
 ### Ensure $env:PSModulePath is updated with the location you used to install.
-Import-Module AzureRM.NetCore.Preview
+if (Get-Module -ListAvailable -Name AzureRM) {
+    Write-Host "Module exists"
+  } else {
+    Write-Host "Module does not exist"
+    Write-Host "Installing Module..."
+    Import-Module AzureRM.NetCore
+  }
 
 ### Supply your Azure Credentials
-Login-AzureRmAccount
+# sign in
+Write-Host "Logging in ...";
+$AccountInfo=Login
 
 ### Specify a name for Azure Resource Group
 $resourceGroupName = "PSAzDemo" + (New-Guid | ForEach-Object guid) -replace "-",""
 $resourceGroupName
 
 ### Create a new Azure Resource Group
-New-AzureRmResourceGroup -Name $resourceGroupName -Location "West US"
+New-AzureRmResourceGroup -Name $resourceGroupName -Location "East US"
 
 ### Deploy an Ubuntu 14.04 VM using Resource Manager cmdlets
 ### Template is available at
@@ -34,7 +59,7 @@ $dnsLabelPrefix
 
 #[SuppressMessage("Microsoft.Security", "CS002:SecretInNextLine", Justification="Demo/doc secret.")]
 $password = ConvertTo-SecureString -String "PowerShellRocks!" -AsPlainText -Force
-New-AzureRmResourceGroupDeployment -ResourceGroupName $resourceGroupName -TemplateFile ./Compute-Linux.json -adminUserName psuser -adminPassword $password -dnsLabelPrefix $dnsLabelPrefix
+New-AzureRmResourceGroupDeployment -ResourceGroupName $resourceGroupName -TemplateFile ./Compute-Linux.json -adminUserName psuser -adminPassword $password -dnsLabelPrefix $dnsLabelPrefixNew-AzureRmResourceGroupDeployment -ResourceGroupName $resourceGroupName -TemplateFile ./Compute-Linux.json -adminUserName psuser -adminPassword $password -dnsLabelPrefix $dnsLabelPrefix
 
 ### Monitor the status of the deployment
 Get-AzureRmResourceGroupDeployment -ResourceGroupName $resourceGroupName
