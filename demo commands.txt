@@ -1,9 +1,25 @@
 Demo 1 - CLI vs Portal
 -------------------------------------
-az group create -n brk2315 -l eastus
 
-az vm create -g brk2315 -n myVM --image win2016datacenter --admin-username sysadmin --admin-password 'P@ssw0rd!234'
+Portal create
+
+az group create --name demo1b --location "eastus"
+az vm create -g demo1b -n demo1bvm --image win2016datacenter --admin-username sysadmin --admin-password 'P@ssw0rd!234'
+
+
+Connect-AzureRmAccount
+New-AzureRmResourceGroup -ResourceGroupName "myResourceGroupVM" -Location "EastUS"
+$cred = Get-Credential
+New-AzureRmVm -ResourceGroupName "myResourceGroupVM" -Name "myVM" -Location "EastUS" -VirtualNetworkName "myVnet" -SubnetName "mySubnet" -SecurityGroupName "myNetworkSecurityGroup" -PublicIpAddressName "myPublicIpAddress" -Credential $cred
+
 
 Demo 2 - 
 -------------------------------------
+
+
+
+
+
+
+ssh pierre@168.62.191.117
 
