@@ -8,7 +8,7 @@ Soft-POC-Deployment
 
 This document Outlines the requirements for the deployment of the base infrastructure for a POC environment in Azure.
 
-The process requires to execute multiple script using PowerShell.  You need to ensure your version of the command-line tools to manage your Azure services.  The updated version can be found <a href="https://www.microsoft.com/web/handlers/webpi.ashx/getinstaller/WindowsAzurePowershellGet.3f.3f.3fnew.appids" target="_blank">here</a> (https://www.microsoft.com/web/handlers/webpi.ashx/getinstaller/WindowsAzurePowershellGet.3f.3f.3fnew.appids).  The current version is v4.2.1 it was released on July 18 2017.
+The process requires to execute multiple script using PowerShell.  You need to ensure your version of the command-line tools to manage your Azure services.  The updated version can be found <a href="https://www.microsoft.com/web/handlers/webpi.ashx/getinstaller/WindowsAzurePowershellGet.3f.3f.3fnew.appids?WT.mc_id=modops-0000-pierrer" target="_blank">here</a> (https://www.microsoft.com/web/handlers/webpi.ashx/getinstaller/WindowsAzurePowershellGet.3f.3f.3fnew.appids?WT.mc_id=modops-0000-pierrer).  The current version is v4.2.1 it was released on July 18 2017.
 
 Files Included in this Repo:
 
